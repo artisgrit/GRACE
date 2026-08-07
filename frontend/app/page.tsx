@@ -12,6 +12,7 @@ export default function Home() {
           <a className="primary-link" href="/search">Search GRACE</a>
           <a className="nav-link" href="/guides">Browse guides</a>
           <a className="nav-link" href="/resources">Find library resources</a>
+          <a className="nav-link" href="/assistant">Research assistant</a>
           <a className="nav-link" href="/admin">Open configuration centre</a>
         </div>
       </section>

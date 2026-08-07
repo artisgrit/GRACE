@@ -86,6 +86,7 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/error", "/actuator/health/**", "/api/v1/auth/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/public/tenants/*/analytics/events").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/public/tenants/*/ai/search", "/api/v1/public/tenants/*/ai/assistant").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/public/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/tenants/*/appearance", "/api/v1/integration-catalogue").permitAll()
                 .anyRequest().authenticated()

@@ -139,6 +139,7 @@ See the [docs/](docs/) directory for comprehensive documentation:
 - [Editorial Workflow and Library Resources](docs/EDITORIAL_WORKFLOW_AND_RESOURCES.md)
 - [Search and Integration Operations](docs/SEARCH_AND_INTEGRATIONS.md)
 - [Analytics and Content Quality](docs/ANALYTICS_AND_CONTENT_QUALITY.md)
+- [AI and Semantic Search](docs/AI_AND_SEMANTIC_SEARCH.md)
 
 - Installation Guide
 - Administration Guide

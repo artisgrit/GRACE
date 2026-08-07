@@ -1,0 +1,1 @@
+import{cookies}from"next/headers";import{redirect}from"next/navigation";import AiSettings from"./AiSettings";export default async function AiPage(){if(!(await cookies()).has("grace_session"))redirect("/login");return <AiSettings/>;}

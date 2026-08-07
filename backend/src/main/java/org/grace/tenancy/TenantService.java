@@ -79,6 +79,8 @@ public class TenantService {
             JOIN guide_templates template ON template.tenant_id = source.id
             WHERE target.slug = :slug
             """).param("slug", request.slug()).update();
+        jdbcClient.sql("INSERT INTO ai_configurations (tenant_slug) VALUES (:slug)")
+            .param("slug", request.slug()).update();
         return find(request.slug());
     }
 
