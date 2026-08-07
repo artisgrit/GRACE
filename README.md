@@ -111,6 +111,8 @@ grace/
 | 6 | DSpace, OAI-PMH, VuFind, Koha, OJS and LTI foundations |
 | 7 | Analytics, link checking, guide health, review reminders, accessibility auditing |
 | 8 | Optional AI gateway, local models, embeddings, hybrid search, RAG assistant |
+| 9 | JSON-LD, RDF, SKOS subjects, canonical identifiers, semantic relationships |
+| 10 | Secured read-only MCP research and discovery server |
 
 ## Quick Start
 
@@ -140,6 +142,7 @@ See the [docs/](docs/) directory for comprehensive documentation:
 - [Search and Integration Operations](docs/SEARCH_AND_INTEGRATIONS.md)
 - [Analytics and Content Quality](docs/ANALYTICS_AND_CONTENT_QUALITY.md)
 - [AI and Semantic Search](docs/AI_AND_SEMANTIC_SEARCH.md)
+- [Linked Data](docs/LINKED_DATA.md)
 
 - Installation Guide
 - Administration Guide

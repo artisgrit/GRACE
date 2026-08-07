@@ -13,6 +13,7 @@ spring:
     locations: classpath:db/migration
 
 grace:
+  public-base-url: ${GRACE_PUBLIC_BASE_URL:http://localhost:8080}
   security:
     jwt-secret: ${JWT_SECRET:change_this_to_a_secure_random_string_minimum_32_characters}
     jwt-issuer: ${JWT_ISSUER:grace}

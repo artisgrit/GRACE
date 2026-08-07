@@ -133,6 +133,7 @@ services:
       GRACE_BOOTSTRAP_ADMIN_EMAIL: ${GRACE_BOOTSTRAP_ADMIN_EMAIL:-admin@grace.local}
       GRACE_BOOTSTRAP_ADMIN_PASSWORD: ${GRACE_BOOTSTRAP_ADMIN_PASSWORD:-ChangeThisAdminPassword!}
       GRACE_BOOTSTRAP_ADMIN_NAME: ${GRACE_BOOTSTRAP_ADMIN_NAME:-GRACE Administrator}
+      GRACE_PUBLIC_BASE_URL: ${GRACE_PUBLIC_BASE_URL:-http://localhost:8080}
     depends_on:
       postgres:
         condition: service_healthy
