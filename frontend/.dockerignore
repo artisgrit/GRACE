@@ -1,5 +1,8 @@
 node_modules
+.pnpm-store
 .next
+playwright-report
+test-results
 npm-debug.log*
 .git
 .env*

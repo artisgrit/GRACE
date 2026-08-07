@@ -5,6 +5,12 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/grace}
     username: ${SPRING_DATASOURCE_USERNAME:grace}
     password: ${SPRING_DATASOURCE_PASSWORD:grace_secure_password_change_me}
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST:localhost}
+      port: ${SPRING_REDIS_PORT:6379}
+      connect-timeout: ${SPRING_REDIS_CONNECT_TIMEOUT:2s}
+      timeout: ${SPRING_REDIS_TIMEOUT:2s}
   flyway:
     enabled: true
     baseline-on-migrate: true
@@ -30,13 +36,37 @@ grace:
     audience: ${GRACE_MCP_AUDIENCE:grace-mcp}
     authorization-server: ${GRACE_MCP_AUTHORIZATION_SERVER:http://localhost:8180/realms/grace}
     allowed-origins: ${GRACE_MCP_ALLOWED_ORIGINS:http://localhost:3000}
+  cors:
+    allowed-origins: ${GRACE_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://127.0.0.1:3000}
+  rate-limit:
+    enabled: ${GRACE_RATE_LIMIT_ENABLED:true}
+    login-per-minute: ${GRACE_RATE_LIMIT_LOGIN_PER_MINUTE:10}
+    mcp-per-minute: ${GRACE_RATE_LIMIT_MCP_PER_MINUTE:120}
+    public-per-minute: ${GRACE_RATE_LIMIT_PUBLIC_PER_MINUTE:240}
+
+server:
+  forward-headers-strategy: ${SERVER_FORWARD_HEADERS_STRATEGY:none}
+
+logging:
+  structured:
+    format:
+      console: ${CONSOLE_LOG_STRUCTURED_FORMAT:ecs}
 
 management:
+  server:
+    port: ${MANAGEMENT_SERVER_PORT:8081}
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,metrics,prometheus
   endpoint:
     health:
       probes:
         enabled: true
+      show-details: when-authorized
+      group:
+        readiness:
+          include: readinessState,db,redis
+  metrics:
+    tags:
+      application: ${spring.application.name}

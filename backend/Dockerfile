@@ -35,11 +35,11 @@ ENV SPRING_PROFILES_ACTIVE=docker
 ENV JAVA_TOOL_OPTIONS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
 
 # Expose port
-EXPOSE 8080
+EXPOSE 8080 8081
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:8080/actuator/health || exit 1
+    CMD curl -f http://localhost:8081/actuator/health/readiness || exit 1
 
 # Run as non-root user
 USER appuser

@@ -36,4 +36,26 @@ jobs:
       - run: corepack enable
       - run: corepack prepare pnpm@11.20.0 --activate
       - run: pnpm install --no-frozen-lockfile
+      - run: pnpm audit --audit-level high
       - run: pnpm build
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Run automated accessibility review
+        env:
+          BACKEND_API_URL: http://127.0.0.1:18080/api/v1
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:3000
+        run: |
+          node tests/mock-backend.mjs &
+          pnpm start &
+          for i in $(seq 1 30); do curl --fail --silent http://127.0.0.1:3000/api/health && break; sleep 2; done
+          pnpm test:a11y
+
+  dependency-review:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high

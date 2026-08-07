@@ -86,7 +86,7 @@ public class SecurityConfiguration {
             .cors(cors -> {})
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/error", "/actuator/health/**", "/api/v1/auth/login").permitAll()
+                .requestMatchers("/error", "/actuator/health/**", "/actuator/prometheus", "/api/v1/auth/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/.well-known/oauth-protected-resource").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/public/tenants/*/analytics/events").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/public/tenants/*/ai/search", "/api/v1/public/tenants/*/ai/assistant").permitAll()
