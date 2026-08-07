@@ -1,6 +1,5 @@
 package org.grace.configuration;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,18 +8,18 @@ public final class JdbcJson {
     private JdbcJson() {
     }
 
-    public static JsonNode read(ResultSet rs, String column, ObjectMapper objectMapper) throws SQLException {
+    public static Object read(ResultSet rs, String column, ObjectMapper objectMapper) throws SQLException {
         try {
             String value = rs.getString(column);
-            return value == null ? objectMapper.createObjectNode() : objectMapper.readTree(value);
+            return value == null ? java.util.Map.of() : objectMapper.readValue(value, Object.class);
         } catch (Exception ex) {
             throw new SQLException("Could not parse JSON column " + column, ex);
         }
     }
 
-    public static String write(JsonNode node, ObjectMapper objectMapper) {
+    public static String write(Object value, ObjectMapper objectMapper) {
         try {
-            return objectMapper.writeValueAsString(node == null ? objectMapper.createObjectNode() : node);
+            return objectMapper.writeValueAsString(value == null ? java.util.Map.of() : value);
         } catch (Exception ex) {
             throw new IllegalArgumentException("Invalid JSON payload", ex);
         }

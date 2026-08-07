@@ -8,6 +8,9 @@ export default function Home() {
           The local Docker stack is running. Backend, search, storage, cache,
           database, and identity services are ready for development.
         </p>
+        <a className="primary-link" href="/admin">
+          Open configuration centre
+        </a>
       </section>
       <section className="status" aria-label="Service status">
         <div>

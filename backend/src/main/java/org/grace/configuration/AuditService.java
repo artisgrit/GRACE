@@ -1,6 +1,5 @@
 package org.grace.configuration;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -19,7 +18,7 @@ public class AuditService {
         this.objectMapper = objectMapper;
     }
 
-    public void record(String tenantSlug, String area, String action, String summary, JsonNode payload) {
+    public void record(String tenantSlug, String area, String action, String summary, Object payload) {
         jdbcClient.sql("""
             INSERT INTO configuration_audit_events
                 (tenant_slug, actor, area, action, summary, payload)
