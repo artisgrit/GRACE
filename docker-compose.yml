@@ -130,6 +130,9 @@ services:
       MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin_secure_password_change_me}
       KEYCLOAK_URL: http://keycloak:8080
       JWT_SECRET: ${JWT_SECRET:-change_this_to_a_secure_random_string_minimum_32_characters}
+      GRACE_BOOTSTRAP_ADMIN_EMAIL: ${GRACE_BOOTSTRAP_ADMIN_EMAIL:-admin@grace.local}
+      GRACE_BOOTSTRAP_ADMIN_PASSWORD: ${GRACE_BOOTSTRAP_ADMIN_PASSWORD:-ChangeThisAdminPassword!}
+      GRACE_BOOTSTRAP_ADMIN_NAME: ${GRACE_BOOTSTRAP_ADMIN_NAME:-GRACE Administrator}
     depends_on:
       postgres:
         condition: service_healthy
@@ -162,6 +165,8 @@ services:
         NEXT_PUBLIC_KEYCLOAK_CLIENT_ID: ${NEXT_PUBLIC_KEYCLOAK_CLIENT_ID:-grace-frontend}
     container_name: grace-frontend
     environment:
+      BACKEND_API_URL: http://backend:8080/api/v1
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8080/api/v1}
       NEXT_PUBLIC_KEYCLOAK_URL: ${NEXT_PUBLIC_KEYCLOAK_URL:-http://localhost:8180}
       NEXT_PUBLIC_KEYCLOAK_REALM: ${NEXT_PUBLIC_KEYCLOAK_REALM:-grace}

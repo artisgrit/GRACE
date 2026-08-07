@@ -45,14 +45,12 @@ type AuditEvent = {
   createdAt: string;
 };
 
-const tenant = "default";
-
-function apiBase() {
-  return process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:8080/api/v1";
-}
+type CurrentUser = { tenantSlug: string; email: string; displayName: string; permissions: string[] };
+type User = { id: string; email: string; displayName: string; enabled: boolean; roles: string[] };
+type Role = { id: string; name: string; displayName: string; permissions: string[] };
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${apiBase()}${path}`, {
+  const response = await fetch(`/api/grace${path}`, {
     ...init,
     headers: {
       "content-type": "application/json",
@@ -60,6 +58,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     }
   });
 
+  if (response.status === 401) {
+    window.location.assign("/login");
+    throw new Error("Your session has expired");
+  }
   if (!response.ok) {
     const body = await response.text();
     throw new Error(body || `Request failed with ${response.status}`);
@@ -107,12 +109,18 @@ function JsonEditor({
 }
 
 export default function AdminConsole() {
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
+  const [tenant, setTenant] = useState("");
   const [appearance, setAppearance] = useState<Appearance | null>(null);
   const [providers, setProviders] = useState<IdentityProvider[]>([]);
   const [integrations, setIntegrations] = useState<Integration[]>([]);
   const [auditEvents, setAuditEvents] = useState<AuditEvent[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
   const [selectedProvider, setSelectedProvider] = useState<IdentityProvider | null>(null);
   const [selectedIntegration, setSelectedIntegration] = useState<Integration | null>(null);
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [newUser, setNewUser] = useState({ email: "", displayName: "", password: "", roles: ["LIBRARIAN"] });
   const [message, setMessage] = useState("Loading configuration...");
 
   const cssVariables = useMemo(() => {
@@ -135,18 +143,31 @@ export default function AdminConsole() {
 
   async function load() {
     try {
-      const [nextAppearance, nextProviders, nextIntegrations, nextAudit] = await Promise.all([
-        request<Appearance>(`/tenants/${tenant}/appearance`),
-        request<IdentityProvider[]>(`/tenants/${tenant}/identity-providers`),
-        request<Integration[]>(`/tenants/${tenant}/integrations`),
-        request<AuditEvent[]>(`/tenants/${tenant}/audit-events`)
+      const meResponse = await fetch("/api/auth/me", { cache: "no-store" });
+      if (!meResponse.ok) {
+        window.location.assign("/login");
+        return;
+      }
+      const me = await meResponse.json() as CurrentUser;
+      setCurrentUser(me);
+      setTenant(me.tenantSlug);
+      const [nextAppearance, nextProviders, nextIntegrations, nextAudit, nextUsers, nextRoles] = await Promise.all([
+        request<Appearance>(`/tenants/${me.tenantSlug}/appearance`),
+        request<IdentityProvider[]>(`/tenants/${me.tenantSlug}/identity-providers`),
+        request<Integration[]>(`/tenants/${me.tenantSlug}/integrations`),
+        request<AuditEvent[]>(`/tenants/${me.tenantSlug}/audit-events`),
+        request<User[]>(`/tenants/${me.tenantSlug}/users`),
+        request<Role[]>(`/tenants/${me.tenantSlug}/roles`)
       ]);
       setAppearance(nextAppearance);
       setProviders(nextProviders);
       setIntegrations(nextIntegrations);
       setAuditEvents(nextAudit);
+      setUsers(nextUsers);
+      setRoles(nextRoles);
       setSelectedProvider(nextProviders[0] ?? null);
       setSelectedIntegration(nextIntegrations[0] ?? null);
+      setSelectedRole(nextRoles[0] ?? null);
       setMessage("Configuration loaded");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Configuration could not be loaded");
@@ -187,16 +208,43 @@ export default function AdminConsole() {
     await load();
   }
 
+  async function createUser() {
+    await request<User>(`/tenants/${tenant}/users`, {
+      method: "POST",
+      body: JSON.stringify(newUser)
+    });
+    setNewUser({ email: "", displayName: "", password: "", roles: ["LIBRARIAN"] });
+    setMessage("User created");
+    await load();
+  }
+
+  async function saveRolePermissions() {
+    if (!selectedRole) return;
+    await request<Role>(`/tenants/${tenant}/roles/${selectedRole.id}/permissions`, {
+      method: "PUT",
+      body: JSON.stringify({ permissions: selectedRole.permissions })
+    });
+    setMessage("Role permissions saved");
+    await load();
+  }
+
+  async function signOut() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    window.location.assign("/login");
+  }
+
   return (
     <main className="admin-shell" style={cssVariables}>
       <header className="admin-header">
         <div>
           <p className="eyebrow">Administration</p>
           <h1>GRACE configuration centre</h1>
+          {currentUser ? <p className="signed-in">{currentUser.displayName} | {currentUser.email}</p> : null}
         </div>
-        <a className="nav-link" href="/">
-          Public site
-        </a>
+        <nav className="admin-actions" aria-label="Account and site">
+          <a className="nav-link" href="/">Public site</a>
+          <button className="secondary-button" type="button" onClick={signOut}>Sign out</button>
+        </nav>
       </header>
 
       <p className="notice" role="status">
@@ -204,6 +252,50 @@ export default function AdminConsole() {
       </p>
 
       <section className="admin-grid">
+        <article className="panel panel-wide">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Access control</p>
+              <h2>Users and roles</h2>
+            </div>
+            <button type="button" onClick={createUser} disabled={!newUser.email || !newUser.displayName || newUser.password.length < 12}>
+              Create user
+            </button>
+          </div>
+          <div className="access-grid">
+            <div>
+              <div className="form-grid">
+                <label className="field"><span>Name</span><input value={newUser.displayName} onChange={(event) => setNewUser({ ...newUser, displayName: event.target.value })} /></label>
+                <label className="field"><span>Email</span><input type="email" value={newUser.email} onChange={(event) => setNewUser({ ...newUser, email: event.target.value })} /></label>
+                <label className="field"><span>Temporary password</span><input type="password" value={newUser.password} onChange={(event) => setNewUser({ ...newUser, password: event.target.value })} /></label>
+                <label className="field">
+                  <span>Initial role</span>
+                  <select value={newUser.roles[0]} onChange={(event) => setNewUser({ ...newUser, roles: [event.target.value] })}>
+                    {roles.map((role) => <option key={role.id} value={role.name}>{role.displayName}</option>)}
+                  </select>
+                </label>
+              </div>
+              <div className="user-list" aria-label="Tenant users">
+                {users.map((user) => <div key={user.id}><strong>{user.displayName}</strong><span>{user.email}</span><span>{user.roles.join(", ")}</span></div>)}
+              </div>
+            </div>
+            <div>
+              <div className="choice-list">
+                {roles.map((role) => (
+                  <button key={role.id} type="button" className={selectedRole?.id === role.id ? "choice active" : "choice"} onClick={() => setSelectedRole(role)}>
+                    {role.displayName}
+                  </button>
+                ))}
+              </div>
+              {selectedRole ? (
+                <>
+                  <JsonEditor label={`${selectedRole.displayName} permissions`} value={selectedRole.permissions} onChange={(value) => setSelectedRole({ ...selectedRole, permissions: value as string[] })} />
+                  <button type="button" onClick={saveRolePermissions}>Save permissions</button>
+                </>
+              ) : null}
+            </div>
+          </div>
+        </article>
         <article className="panel panel-wide">
           <div className="panel-heading">
             <div>

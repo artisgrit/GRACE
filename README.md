@@ -123,6 +123,7 @@ docker-compose up -d
 
 # Access the application
 # Frontend: http://localhost:3000
+# Administrator sign-in: http://localhost:3000/login
 # Backend API: http://localhost:8080
 # Keycloak: http://localhost:8180
 # OpenSearch: http://localhost:9200
@@ -131,6 +132,8 @@ docker-compose up -d
 ## Documentation
 
 See the [docs/](docs/) directory for comprehensive documentation:
+
+- [Identity, Tenancy and RBAC](docs/IDENTITY_TENANCY_RBAC.md)
 
 - Installation Guide
 - Administration Guide

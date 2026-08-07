@@ -14,6 +14,7 @@ public class WebConfiguration implements WebMvcConfigurer {
                 "http://127.0.0.1:3000"
             )
             .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-            .allowedHeaders("*");
+            .allowedHeaders("Authorization", "Content-Type", "Accept")
+            .maxAge(3600);
     }
 }

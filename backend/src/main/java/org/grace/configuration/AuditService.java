@@ -6,6 +6,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,7 +28,7 @@ public class AuditService {
             VALUES (:tenantSlug, :actor, :area, :action, :summary, CAST(:payload AS jsonb))
             """)
             .param("tenantSlug", tenantSlug)
-            .param("actor", "system")
+            .param("actor", currentActor())
             .param("area", area)
             .param("action", action)
             .param("summary", summary)
@@ -53,5 +56,14 @@ public class AuditService {
                 rs.getObject("created_at", Timestamp.class).toInstant()
             ))
             .list();
+    }
+
+    private String currentActor() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof Jwt jwt) {
+            String email = jwt.getClaimAsString("email");
+            return email == null ? jwt.getSubject() : email;
+        }
+        return "system";
     }
 }

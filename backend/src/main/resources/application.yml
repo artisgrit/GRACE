@@ -11,6 +11,16 @@ spring:
     baseline-version: 0
     locations: classpath:db/migration
 
+grace:
+  security:
+    jwt-secret: ${JWT_SECRET:change_this_to_a_secure_random_string_minimum_32_characters}
+    jwt-issuer: ${JWT_ISSUER:grace}
+    access-token-minutes: ${JWT_ACCESS_TOKEN_MINUTES:30}
+  bootstrap:
+    admin-email: ${GRACE_BOOTSTRAP_ADMIN_EMAIL:}
+    admin-password: ${GRACE_BOOTSTRAP_ADMIN_PASSWORD:}
+    admin-name: ${GRACE_BOOTSTRAP_ADMIN_NAME:GRACE Administrator}
+
 management:
   endpoints:
     web:

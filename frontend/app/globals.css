@@ -25,10 +25,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    linear-gradient(135deg, rgba(15, 118, 110, 0.12), transparent 32rem),
-    linear-gradient(315deg, rgba(37, 99, 235, 0.1), transparent 28rem),
-    var(--grace-background);
+  background: var(--grace-background);
 }
 
 .shell {
@@ -150,6 +147,22 @@ button:disabled {
 
 .admin-header {
   margin-bottom: 1rem;
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.secondary-button {
+  background: transparent;
+  color: var(--grace-color-primary);
+}
+
+.signed-in {
+  margin: 0.75rem 0 0;
+  color: var(--grace-muted-text);
 }
 
 .admin-header h1,
@@ -285,15 +298,91 @@ button:disabled {
   font-size: 0.9rem;
 }
 
+.access-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+  gap: 1.5rem;
+}
+
+.user-list {
+  display: grid;
+  gap: 0;
+  margin-top: 1rem;
+  border-top: 1px solid var(--grace-border);
+}
+
+.user-list div {
+  display: grid;
+  grid-template-columns: minmax(10rem, 1fr) minmax(12rem, 1fr) minmax(10rem, 1fr);
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--grace-border);
+}
+
+.user-list span {
+  color: var(--grace-muted-text);
+  overflow-wrap: anywhere;
+}
+
+.login-shell {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.login-panel {
+  display: grid;
+  gap: 0.25rem;
+  width: min(100%, 28rem);
+  padding: 1.5rem;
+  border: 1px solid var(--grace-border);
+  border-radius: var(--grace-radius);
+  background: var(--grace-surface);
+  box-shadow: 0 1rem 3rem rgba(23, 32, 51, 0.08);
+}
+
+.login-panel h1 {
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.login-panel p {
+  color: var(--grace-muted-text);
+  line-height: 1.5;
+}
+
+.login-panel button {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.quiet-link {
+  margin-top: 1rem;
+  color: var(--grace-color-primary);
+  text-align: center;
+}
+
+.form-error {
+  margin: 0.75rem 0 0;
+  color: #b91c1c !important;
+}
+
 @media (max-width: 720px) {
   .status,
   .admin-grid,
-  .form-grid {
+  .form-grid,
+  .access-grid {
     grid-template-columns: 1fr;
   }
 
   .admin-header,
   .panel-heading {
     display: grid;
+  }
+
+  .user-list div {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
   }
 }
