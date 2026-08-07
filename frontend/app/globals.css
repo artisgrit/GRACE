@@ -91,6 +91,18 @@ button {
   margin-top: 1.5rem;
 }
 
+.home-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.home-actions .primary-link {
+  margin-top: 0;
+}
+
 .nav-link {
   background: transparent;
   color: var(--grace-color-primary);
@@ -368,21 +380,464 @@ button:disabled {
   color: #b91c1c !important;
 }
 
+.workspace-shell,
+.public-guides-shell,
+.public-guide-shell {
+  width: min(100% - 2rem, 1180px);
+  margin: 0 auto;
+  padding: 2rem 0 4rem;
+}
+
+.workspace-header,
+.public-list-header,
+.editor-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.workspace-header h1,
+.public-list-header h1,
+.editor-header h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.05;
+}
+
+.public-list-header p:last-child,
+.editor-header p {
+  color: var(--grace-muted-text);
+}
+
+.guide-workspace-grid {
+  display: grid;
+  grid-template-columns: minmax(18rem, 22rem) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.create-guide-panel {
+  position: sticky;
+  top: 1rem;
+  margin-top: 0;
+}
+
+.guide-list,
+.public-guide-list {
+  display: grid;
+  border-top: 1px solid var(--grace-border);
+}
+
+.guide-row,
+.public-guide-list article {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--grace-border);
+}
+
+.guide-row h2,
+.public-guide-list h2 {
+  margin: 0.35rem 0;
+  font-size: 1.25rem;
+}
+
+.guide-row h2 a,
+.public-guide-list h2 a,
+.back-link {
+  color: var(--grace-color-primary);
+}
+
+.guide-row p,
+.public-guide-list p {
+  margin: 0;
+  color: var(--grace-muted-text);
+  line-height: 1.55;
+}
+
+.guide-row dl {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 10rem;
+  margin: 0;
+}
+
+.guide-row dl div {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  gap: 0.5rem;
+}
+
+.guide-row dt,
+.guide-row dd {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.guide-row dt,
+.public-guide-list small {
+  color: var(--grace-muted-text);
+}
+
+.status-label {
+  color: var(--grace-color-secondary);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.empty-state h2 {
+  margin: 0;
+}
+
+.empty-state p {
+  color: var(--grace-muted-text);
+}
+
+.editor-shell {
+  width: min(100% - 2rem, 1440px);
+  margin: 0 auto;
+  padding: 1.5rem 0 4rem;
+}
+
+.editor-header-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.segmented-control {
+  display: inline-grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0.2rem;
+  border: 1px solid var(--grace-border);
+  border-radius: var(--grace-radius);
+  background: var(--grace-surface);
+}
+
+.segmented-control button {
+  min-height: 2.2rem;
+  border: 0;
+  background: transparent;
+  color: var(--grace-muted-text);
+}
+
+.segmented-control button.active {
+  background: var(--grace-color-secondary);
+  color: #ffffff;
+}
+
+.editor-notice {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+
+.guide-editor-layout {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.page-manager {
+  position: sticky;
+  top: 4rem;
+  padding: 1rem;
+  border: 1px solid var(--grace-border);
+  border-radius: var(--grace-radius);
+  background: var(--grace-surface);
+}
+
+.page-manager-heading,
+.block-editor header,
+.block-actions,
+.page-order,
+.block-picker {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.page-manager-heading {
+  justify-content: space-between;
+}
+
+.page-manager h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.page-tabs {
+  display: grid;
+  gap: 0.35rem;
+  margin: 1rem 0;
+}
+
+.page-tabs button {
+  justify-content: flex-start;
+  width: 100%;
+  border-color: transparent;
+  background: transparent;
+  color: var(--grace-text);
+  text-align: left;
+}
+
+.page-tabs button.active {
+  border-color: var(--grace-border);
+  background: #eef6f5;
+  color: var(--grace-color-primary);
+}
+
+.page-order {
+  align-items: stretch;
+}
+
+.editor-canvas {
+  min-width: 0;
+}
+
+.guide-settings {
+  margin-top: 0;
+}
+
+.block-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.block-editor {
+  padding: 1rem;
+  border: 1px solid var(--grace-border);
+  border-radius: var(--grace-radius);
+  background: #fbfcfd;
+}
+
+.block-editor header {
+  justify-content: space-between;
+}
+
+.small-button {
+  min-height: 2rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.82rem;
+}
+
+.danger-button {
+  border-color: #b91c1c;
+  background: transparent;
+  color: #b91c1c;
+}
+
+.block-picker {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--grace-border);
+}
+
+.block-picker > span {
+  margin-right: 0.25rem;
+  color: var(--grace-muted-text);
+  font-weight: 700;
+}
+
+.link-edit-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.link-edit-list > div {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr auto;
+  gap: 0.5rem;
+  align-items: end;
+}
+
+.save-summary {
+  display: flex;
+  align-items: end;
+  gap: 0.75rem;
+}
+
+.save-summary .field {
+  flex: 1;
+}
+
+.revision-list {
+  display: grid;
+  border-top: 1px solid var(--grace-border);
+}
+
+.revision-list article {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--grace-border);
+}
+
+.revision-list article div,
+.guide-byline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.revision-list small,
+.guide-byline {
+  color: var(--grace-muted-text);
+}
+
+.guide-document {
+  width: min(100%, 960px);
+  margin: 1rem auto 0;
+  background: var(--grace-surface);
+}
+
+.guide-document-header {
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--grace-border);
+}
+
+.guide-document-header h1 {
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  line-height: 1.08;
+}
+
+.guide-document-header > p:not(.eyebrow) {
+  max-width: 48rem;
+  color: var(--grace-muted-text);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.guide-page-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--grace-border);
+}
+
+.guide-page-nav a {
+  color: var(--grace-color-primary);
+  font-weight: 700;
+}
+
+.guide-page-content,
+.guide-block-stack {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.guide-rendered-page {
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--grace-border);
+}
+
+.guide-rendered-page > h2 {
+  margin: 0 0 1.5rem;
+  font-size: 1.65rem;
+}
+
+.guide-heading-block {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.guide-text-block,
+.guide-callout p {
+  margin: 0;
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
+.guide-callout {
+  padding: 1rem;
+  border-left: 4px solid var(--grace-color-accent);
+  background: #fff9ed;
+}
+
+.guide-callout p {
+  margin-top: 0.35rem;
+}
+
+.guide-link-block h2 {
+  font-size: 1.2rem;
+}
+
+.guide-link-block a {
+  color: var(--grace-color-secondary);
+}
+
+.guide-code-block {
+  overflow-x: auto;
+  padding: 1rem;
+  border: 1px solid var(--grace-border);
+  background: #172033;
+  color: #f8fafc;
+}
+
+.guide-unsupported-block {
+  padding: 1rem;
+  border: 1px dashed var(--grace-border);
+  color: var(--grace-muted-text);
+}
+
+.public-guide-shell > .back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
 @media (max-width: 720px) {
   .status,
   .admin-grid,
   .form-grid,
-  .access-grid {
+  .access-grid,
+  .guide-workspace-grid,
+  .guide-editor-layout {
     grid-template-columns: 1fr;
   }
 
   .admin-header,
-  .panel-heading {
+  .panel-heading,
+  .workspace-header,
+  .public-list-header,
+  .editor-header {
     display: grid;
   }
 
   .user-list div {
     grid-template-columns: 1fr;
     gap: 0.2rem;
+  }
+
+  .create-guide-panel,
+  .page-manager,
+  .editor-notice {
+    position: static;
+  }
+
+  .guide-row,
+  .public-guide-list article,
+  .link-edit-list > div {
+    grid-template-columns: 1fr;
+  }
+
+  .save-summary,
+  .revision-list article {
+    align-items: stretch;
+    flex-direction: column;
   }
 }

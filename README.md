@@ -134,6 +134,7 @@ docker-compose up -d
 See the [docs/](docs/) directory for comprehensive documentation:
 
 - [Identity, Tenancy and RBAC](docs/IDENTITY_TENANCY_RBAC.md)
+- [Guide Management](docs/GUIDE_MANAGEMENT.md)
 
 - Installation Guide
 - Administration Guide

@@ -70,6 +70,15 @@ public class TenantService {
                    tokens, layout, navigation, components, custom_css
             FROM appearance_configurations WHERE tenant_slug = 'default'
             """).param("slug", request.slug()).param("name", request.name()).update();
+        jdbcClient.sql("""
+            INSERT INTO guide_templates
+                (tenant_id, template_key, name, description, guide_type_id, definition, enabled)
+            SELECT target.id, template.template_key, template.name, template.description,
+                   template.guide_type_id, template.definition, template.enabled
+            FROM tenants target JOIN tenants source ON source.slug = 'default'
+            JOIN guide_templates template ON template.tenant_id = source.id
+            WHERE target.slug = :slug
+            """).param("slug", request.slug()).update();
         return find(request.slug());
     }
 

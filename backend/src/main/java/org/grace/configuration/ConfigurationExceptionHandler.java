@@ -1,6 +1,7 @@
 package org.grace.configuration;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -24,5 +25,11 @@ public class ConfigurationExceptionHandler {
     ResponseEntity<ApiError> handleConflict() {
         return ResponseEntity.status(HttpStatus.CONFLICT)
             .body(ApiError.of("conflict", "The submitted value conflicts with an existing record"));
+    }
+
+    @ExceptionHandler(OptimisticLockingFailureException.class)
+    ResponseEntity<ApiError> handleOptimisticLock(OptimisticLockingFailureException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body(ApiError.of("stale_version", ex.getMessage()));
     }
 }

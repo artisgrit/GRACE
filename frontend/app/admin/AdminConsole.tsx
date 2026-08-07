@@ -242,6 +242,7 @@ export default function AdminConsole() {
           {currentUser ? <p className="signed-in">{currentUser.displayName} | {currentUser.email}</p> : null}
         </div>
         <nav className="admin-actions" aria-label="Account and site">
+          <a className="nav-link" href="/admin/guides">Guides</a>
           <a className="nav-link" href="/">Public site</a>
           <button className="secondary-button" type="button" onClick={signOut}>Sign out</button>
         </nav>
