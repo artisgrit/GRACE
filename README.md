@@ -103,10 +103,10 @@ grace/
 | Phase | Focus Areas |
 |-------|-------------|
 | 0 | Architecture, Infrastructure, CI/CD, Docker, Authentication, RBAC |
-| 1 | Guide Management, Pages, Templates, Publishing |
-| 2 | Resources, Books, Databases, Librarians, FAQs |
-| 3 | Search, Analytics, Notifications |
-| 4 | Library Integrations (DSpace, Koha, VuFind, OJS, LMS) |
+| 1 | Identity, Tenancy, Authentication, RBAC |
+| 2 | Guide Management, Pages, Blocks, Templates, Revisions |
+| 3 | Editorial Workflow, Review, Publishing, Scheduling |
+| 4 | Subjects, Databases, Librarians, FAQs, Books, Reading Lists |
 | 5 | AI, Semantic Search, RAG |
 | 6 | Linked Data, Knowledge Graph, MCP |
 | 7 | Production Hardening, Accessibility, Performance, Security, Documentation |
@@ -135,6 +135,7 @@ See the [docs/](docs/) directory for comprehensive documentation:
 
 - [Identity, Tenancy and RBAC](docs/IDENTITY_TENANCY_RBAC.md)
 - [Guide Management](docs/GUIDE_MANAGEMENT.md)
+- [Editorial Workflow and Library Resources](docs/EDITORIAL_WORKFLOW_AND_RESOURCES.md)
 
 - Installation Guide
 - Administration Guide

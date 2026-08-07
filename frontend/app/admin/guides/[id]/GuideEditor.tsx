@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import GuideRenderer from "../../../../components/guides/GuideRenderer";
+import WorkflowPanel from "../../../../components/guides/WorkflowPanel";
 import type { GuideBlock, GuideDetail, GuidePage, GuideRevision, GuideType } from "../../../../lib/guide-types";
 
-type CurrentUser = { tenantSlug: string };
-type EditorMode = "edit" | "preview" | "history";
+type CurrentUser = { tenantSlug: string; permissions: string[] };
+type EditorMode = "edit" | "preview" | "history" | "workflow";
 
 async function request<T>(path: string, init?: RequestInit) {
   const response = await fetch(`/api/grace${path}`, { ...init, headers: { "content-type": "application/json", ...(init?.headers ?? {}) } });
@@ -51,6 +52,7 @@ function BlockEditor({ block, onChange, onRemove, onMoveUp, onMoveDown, first, l
 
 export default function GuideEditor({ guideId }: { guideId: string }) {
   const [tenant, setTenant] = useState("");
+  const [permissions, setPermissions] = useState<string[]>([]);
   const [guide, setGuide] = useState<GuideDetail | null>(null);
   const [types, setTypes] = useState<GuideType[]>([]);
   const [revisions, setRevisions] = useState<GuideRevision[]>([]);
@@ -71,7 +73,7 @@ export default function GuideEditor({ guideId }: { guideId: string }) {
       request<GuideType[]>(`/tenants/${me.tenantSlug}/guide-types`),
       request<GuideRevision[]>(`/tenants/${me.tenantSlug}/guides/${guideId}/revisions`)
     ]);
-    setTenant(me.tenantSlug); setGuide(nextGuide); setTypes(nextTypes); setRevisions(nextRevisions);
+    setTenant(me.tenantSlug); setPermissions(me.permissions); setGuide(nextGuide); setTypes(nextTypes); setRevisions(nextRevisions);
     setSelectedPageId(nextGuide.pages[0]?.id ?? ""); setDirty(false); setMessage("All changes saved");
   }
 
@@ -144,10 +146,11 @@ export default function GuideEditor({ guideId }: { guideId: string }) {
 
   return (
     <main className="editor-shell">
-      <header className="editor-header"><div><a className="back-link" href="/admin/guides">Back to guides</a><h1>{guide.title}</h1><p>{guide.status.replaceAll("_", " ")} | Revision {guide.revisionNumber}</p></div><div className="editor-header-actions"><div className="segmented-control" aria-label="Editor view"><button className={mode === "edit" ? "active" : ""} type="button" onClick={() => setMode("edit")}>Edit</button><button className={mode === "preview" ? "active" : ""} type="button" onClick={() => setMode("preview")}>Preview</button><button className={mode === "history" ? "active" : ""} type="button" onClick={() => setMode("history")}>History</button></div><button type="button" onClick={() => void persist(changeSummary)} disabled={!dirty || saving}>Save</button></div></header>
+      <header className="editor-header"><div><a className="back-link" href="/admin/guides">Back to guides</a><h1>{guide.title}</h1><p>{guide.status.replaceAll("_", " ")} | Revision {guide.revisionNumber}</p></div><div className="editor-header-actions"><div className="segmented-control editor-modes" aria-label="Editor view"><button className={mode === "edit" ? "active" : ""} type="button" onClick={() => setMode("edit")}>Edit</button><button className={mode === "preview" ? "active" : ""} type="button" onClick={() => setMode("preview")}>Preview</button><button className={mode === "workflow" ? "active" : ""} type="button" onClick={() => setMode("workflow")}>Workflow</button><button className={mode === "history" ? "active" : ""} type="button" onClick={() => setMode("history")}>History</button></div><button type="button" onClick={() => void persist(changeSummary)} disabled={!dirty || saving}>Save</button></div></header>
       <p className="notice editor-notice" role="status">{message}</p>
       {mode === "preview" ? <GuideRenderer guide={guide} /> : null}
       {mode === "history" ? <section className="revision-list">{revisions.map(revision => <article key={revision.id}><div><strong>Revision {revision.revisionNumber}</strong><span>{revision.changeSummary}</span><small>{revision.authorName} | {new Date(revision.createdAt).toLocaleString()}</small></div><button className="secondary-button" type="button" onClick={() => void restore(revision.revisionNumber)} disabled={revision.revisionNumber === guide.revisionNumber}>Restore</button></article>)}</section> : null}
+      {mode === "workflow" ? <WorkflowPanel tenant={tenant} guideId={guide.id} permissions={permissions} onChange={(status, version) => setGuide(current => current ? { ...current, status, version } : current)} /> : null}
       {mode === "edit" ? <div className="guide-editor-layout">
         <aside className="page-manager"><div className="page-manager-heading"><h2>Pages</h2><button className="small-button" type="button" onClick={() => { const id = crypto.randomUUID(); const title = `Page ${guide.pages.length + 1}`; change(current => ({ ...current, pages: [...current.pages, { id, title, slug: slugify(title), position: current.pages.length, layout: { columns: 1 }, blocks: [] }] })); setSelectedPageId(id); }}>Add page</button></div><div className="page-tabs">{guide.pages.map(item => <button type="button" key={item.id} className={item.id === page.id ? "active" : ""} onClick={() => setSelectedPageId(item.id)}>{item.title}</button>)}</div><div className="page-order"><button className="small-button secondary-button" type="button" onClick={() => movePage(-1)} disabled={pageIndex === 0}>Move page up</button><button className="small-button secondary-button" type="button" onClick={() => movePage(1)} disabled={pageIndex === guide.pages.length - 1}>Move page down</button></div></aside>
         <section className="editor-canvas"><section className="panel guide-settings"><div className="form-grid"><label className="field"><span>Guide title</span><input value={guide.title} onChange={event => change(current => ({ ...current, title: event.target.value }))} /></label><label className="field"><span>URL slug</span><input value={guide.slug} onChange={event => change(current => ({ ...current, slug: slugify(event.target.value) }))} /></label><label className="field"><span>Guide type</span><select value={guide.guideTypeKey} onChange={event => change(current => ({ ...current, guideTypeKey: event.target.value }))}>{types.map(type => <option key={type.id} value={type.key}>{type.displayName}</option>)}</select></label><label className="field"><span>Tags</span><input value={guide.tags.join(", ")} onChange={event => change(current => ({ ...current, tags: event.target.value.split(",").map(tag => tag.trim()).filter(Boolean) }))} /></label></div><label className="field"><span>Description</span><textarea rows={3} value={guide.description} onChange={event => change(current => ({ ...current, description: event.target.value }))} /></label></section>

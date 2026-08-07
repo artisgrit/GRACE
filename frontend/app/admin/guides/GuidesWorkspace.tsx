@@ -56,7 +56,7 @@ export default function GuidesWorkspace() {
     <main className="workspace-shell">
       <header className="workspace-header">
         <div><p className="eyebrow">Guide management</p><h1>Guides</h1></div>
-        <nav className="admin-actions"><a className="nav-link" href="/admin">Configuration</a><a className="nav-link" href="/">Public site</a></nav>
+        <nav className="admin-actions"><a className="nav-link" href="/admin/resources">Resources</a><a className="nav-link" href="/admin">Configuration</a><a className="nav-link" href="/">Public site</a></nav>
       </header>
       <p className="notice" role="status">{message}</p>
       <section className="guide-workspace-grid">

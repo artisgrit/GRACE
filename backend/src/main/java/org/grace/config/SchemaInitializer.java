@@ -23,6 +23,7 @@ public class SchemaInitializer implements ApplicationRunner {
             .locations("classpath:db/migration")
             .baselineOnMigrate(true)
             .baselineVersion("0")
+            .outOfOrder(true)
             .load()
             .migrate();
     }

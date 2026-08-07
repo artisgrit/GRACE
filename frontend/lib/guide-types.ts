@@ -53,3 +53,18 @@ export type GuideRevision = {
   changeSummary: string;
   createdAt: string;
 };
+export type WorkflowState = {
+  status: string;
+  version: number;
+  submittedAt?: string | null;
+  approvedAt?: string | null;
+  scheduledAt?: string | null;
+  publishedAt?: string | null;
+  expiresAt?: string | null;
+  lastReviewedAt?: string | null;
+  nextReviewAt?: string | null;
+  archivedAt?: string | null;
+  reviewers: Array<{ id: string; displayName: string; email: string; assignedAt: string }>;
+  comments: Array<{ id: string; authorName: string; body: string; resolved: boolean; createdAt: string }>;
+  events: Array<{ id: string; action: string; fromStatus: string; toStatus: string; comment: string; actorName: string; createdAt: string }>;
+};

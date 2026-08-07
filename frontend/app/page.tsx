@@ -10,6 +10,7 @@ export default function Home() {
         </p>
         <div className="home-actions">
           <a className="primary-link" href="/guides">Browse guides</a>
+          <a className="nav-link" href="/resources">Find library resources</a>
           <a className="nav-link" href="/admin">Open configuration centre</a>
         </div>
       </section>
