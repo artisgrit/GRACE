@@ -77,7 +77,9 @@ public class SecurityConfiguration {
     @Bean
     SecurityFilterChain securityFilterChain(
         HttpSecurity http,
-        JwtAuthenticationConverter jwtAuthenticationConverter
+        JwtAuthenticationConverter jwtAuthenticationConverter,
+        @Value("${grace.public-base-url:http://localhost:8080}") String publicBaseUrl,
+        @Value("${grace.mcp.authorization-server:http://localhost:8180/realms/grace}") String authorizationServer
     ) throws Exception {
         return http
             .csrf(csrf -> csrf.disable())
@@ -85,6 +87,7 @@ public class SecurityConfiguration {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/error", "/actuator/health/**", "/api/v1/auth/login").permitAll()
+                .requestMatchers(HttpMethod.GET, "/.well-known/oauth-protected-resource").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/public/tenants/*/analytics/events").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/public/tenants/*/ai/search", "/api/v1/public/tenants/*/ai/assistant").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/public/**").permitAll()
@@ -92,6 +95,19 @@ public class SecurityConfiguration {
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(resourceServer -> resourceServer
+                .protectedResourceMetadata(metadata -> metadata.protectedResourceMetadataCustomizer(builder -> builder
+                    .resource(publicBaseUrl.replaceAll("/+$", "") + "/api/v1/mcp")
+                    .resourceName("GRACE Research Discovery MCP")
+                    .authorizationServer(authorizationServer.replaceAll("/+$", ""))
+                    .scope("mcp.read")
+                    .tlsClientCertificateBoundAccessTokens(false)))
+                .authenticationEntryPoint((request, response, exception) -> {
+                    if (request.getRequestURI().startsWith("/api/v1/mcp/")) {
+                        response.setHeader("WWW-Authenticate", "Bearer resource_metadata=\"" +
+                            publicBaseUrl.replaceAll("/+$", "") + "/.well-known/oauth-protected-resource\"");
+                    }
+                    response.sendError(401, "Authentication is required");
+                })
                 .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
             .build();
     }

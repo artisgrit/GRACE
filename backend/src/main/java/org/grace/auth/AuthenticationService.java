@@ -68,6 +68,7 @@ public class AuthenticationService {
             .issuedAt(now)
             .expiresAt(expiresAt)
             .subject(user.id().toString())
+            .audience(List.of("grace-api", "grace-mcp"))
             .claim("tenant", user.tenantSlug())
             .claim("email", user.email())
             .claim("name", user.displayName())

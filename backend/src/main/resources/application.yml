@@ -26,6 +26,10 @@ grace:
     url: ${OPENSEARCH_URL:http://${OPENSEARCH_HOST:localhost}:${OPENSEARCH_PORT:9200}}
     sync-interval-ms: ${SEARCH_SYNC_INTERVAL_MS:60000}
     initial-delay-ms: ${SEARCH_INITIAL_DELAY_MS:15000}
+  mcp:
+    audience: ${GRACE_MCP_AUDIENCE:grace-mcp}
+    authorization-server: ${GRACE_MCP_AUTHORIZATION_SERVER:http://localhost:8180/realms/grace}
+    allowed-origins: ${GRACE_MCP_ALLOWED_ORIGINS:http://localhost:3000}
 
 management:
   endpoints:

@@ -143,6 +143,7 @@ See the [docs/](docs/) directory for comprehensive documentation:
 - [Analytics and Content Quality](docs/ANALYTICS_AND_CONTENT_QUALITY.md)
 - [AI and Semantic Search](docs/AI_AND_SEMANTIC_SEARCH.md)
 - [Linked Data](docs/LINKED_DATA.md)
+- [Secured MCP Server](docs/MCP_SERVER.md)
 
 - Installation Guide
 - Administration Guide

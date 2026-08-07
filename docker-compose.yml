@@ -134,6 +134,9 @@ services:
       GRACE_BOOTSTRAP_ADMIN_PASSWORD: ${GRACE_BOOTSTRAP_ADMIN_PASSWORD:-ChangeThisAdminPassword!}
       GRACE_BOOTSTRAP_ADMIN_NAME: ${GRACE_BOOTSTRAP_ADMIN_NAME:-GRACE Administrator}
       GRACE_PUBLIC_BASE_URL: ${GRACE_PUBLIC_BASE_URL:-http://localhost:8080}
+      GRACE_MCP_AUDIENCE: ${GRACE_MCP_AUDIENCE:-grace-mcp}
+      GRACE_MCP_AUTHORIZATION_SERVER: ${GRACE_MCP_AUTHORIZATION_SERVER:-http://localhost:8180/realms/grace}
+      GRACE_MCP_ALLOWED_ORIGINS: ${GRACE_MCP_ALLOWED_ORIGINS:-http://localhost:3000}
     depends_on:
       postgres:
         condition: service_healthy
