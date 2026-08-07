@@ -109,7 +109,8 @@ grace/
 | 4 | Subjects, Databases, Librarians, FAQs, Books, Reading Lists |
 | 5 | OpenSearch indexing, unified search, facets, autocomplete, resilient fallback |
 | 6 | DSpace, OAI-PMH, VuFind, Koha, OJS and LTI foundations |
-| 7 | Production Hardening, Accessibility, Performance, Security, Documentation |
+| 7 | Analytics, link checking, guide health, review reminders, accessibility auditing |
+| 8 | Optional AI gateway, local models, embeddings, hybrid search, RAG assistant |
 
 ## Quick Start
 
@@ -137,6 +138,7 @@ See the [docs/](docs/) directory for comprehensive documentation:
 - [Guide Management](docs/GUIDE_MANAGEMENT.md)
 - [Editorial Workflow and Library Resources](docs/EDITORIAL_WORKFLOW_AND_RESOURCES.md)
 - [Search and Integration Operations](docs/SEARCH_AND_INTEGRATIONS.md)
+- [Analytics and Content Quality](docs/ANALYTICS_AND_CONTENT_QUALITY.md)
 
 - Installation Guide
 - Administration Guide

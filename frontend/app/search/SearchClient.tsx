@@ -25,6 +25,7 @@ export default function SearchClient({ tenant }: { tenant: string }) {
       if (!response.ok) throw new Error("Search is temporarily unavailable");
       const next = await response.json() as Results;
       setData(next);
+      void fetch(`/api/grace/public/tenants/${tenant}/analytics/events`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ eventType: "SEARCH", path: "/search", metadata: { type: type || "ALL", subjectFiltered: Boolean(subject) } }) });
       setMessage(`${next.total} result${next.total === 1 ? "" : "s"}${next.degraded ? " - using resilient database search" : ""}`);
     } catch (error) { setMessage(error instanceof Error ? error.message : "Search is temporarily unavailable"); }
   }

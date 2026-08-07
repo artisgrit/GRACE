@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AnalyticsTracker from "../components/AnalyticsTracker";
+
+const tenant = process.env.GRACE_TENANT_SLUG ?? "default";
 
 export const metadata: Metadata = {
   title: "GRACE",
@@ -13,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body><AnalyticsTracker tenant={tenant} />{children}</body>
     </html>
   );
 }

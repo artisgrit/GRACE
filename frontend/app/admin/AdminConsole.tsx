@@ -263,6 +263,7 @@ export default function AdminConsole() {
         <nav className="admin-actions" aria-label="Account and site">
           <a className="nav-link" href="/admin/guides">Guides</a>
           <a className="nav-link" href="/admin/resources">Resources</a>
+          <a className="nav-link" href="/admin/quality">Analytics</a>
           <a className="nav-link" href="/">Public site</a>
           <button className="secondary-button" type="button" onClick={signOut}>Sign out</button>
         </nav>
