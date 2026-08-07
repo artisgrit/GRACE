@@ -1,5 +1,5 @@
 # GRACE Frontend - Next.js Application
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ COPY package*.json ./
 COPY pnpm-lock.yaml* ./
 
 # Install dependencies (pnpm preferred for speed)
-RUN corepack enable && pnpm install --frozen-lockfile
+RUN corepack enable && corepack prepare pnpm@11.20.0 --activate && pnpm install --no-frozen-lockfile
 
 # Copy source code
 COPY . .
@@ -28,7 +28,7 @@ ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
 RUN pnpm build
 
 # Runtime stage
-FROM node:20-alpine
+FROM node:24-alpine
 
 WORKDIR /app
 

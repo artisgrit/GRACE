@@ -30,4 +30,16 @@ public class ConnectorHealth {
     public void setLastSuccessfulConnection(Instant t) { this.lastSuccessfulConnection = t; }
     public Instant getLastErrorTime() { return lastErrorTime; }
     public void setLastErrorTime(Instant t) { this.lastErrorTime = t; }
-    public String getLastErrorMessa
+    public String getLastErrorMessage() { return lastErrorMessage; }
+    public void setLastErrorMessage(String lastErrorMessage) { this.lastErrorMessage = lastErrorMessage; }
+    public Instant getLastSync() { return lastSync; }
+    public void setLastSync(Instant lastSync) { this.lastSync = lastSync; }
+    public Instant getNextScheduledSync() { return nextScheduledSync; }
+    public void setNextScheduledSync(Instant nextScheduledSync) { this.nextScheduledSync = nextScheduledSync; }
+    public long getRecordsProcessed() { return recordsProcessed; }
+    public void setRecordsProcessed(long recordsProcessed) { this.recordsProcessed = recordsProcessed; }
+    public int getErrorCount() { return errorCount; }
+    public void setErrorCount(int errorCount) { this.errorCount = errorCount; }
+    public Map<String, Object> getDetails() { return details; }
+    public void setDetails(Map<String, Object> details) { this.details = details; }
+}

@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: grace-backend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/grace}
+    username: ${SPRING_DATASOURCE_USERNAME:grace}
+    password: ${SPRING_DATASOURCE_PASSWORD:grace_secure_password_change_me}
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    locations: classpath:db/migration
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
