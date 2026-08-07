@@ -21,6 +21,10 @@ grace:
     admin-email: ${GRACE_BOOTSTRAP_ADMIN_EMAIL:}
     admin-password: ${GRACE_BOOTSTRAP_ADMIN_PASSWORD:}
     admin-name: ${GRACE_BOOTSTRAP_ADMIN_NAME:GRACE Administrator}
+  search:
+    url: ${OPENSEARCH_URL:http://${OPENSEARCH_HOST:localhost}:${OPENSEARCH_PORT:9200}}
+    sync-interval-ms: ${SEARCH_SYNC_INTERVAL_MS:60000}
+    initial-delay-ms: ${SEARCH_INITIAL_DELAY_MS:15000}
 
 management:
   endpoints:

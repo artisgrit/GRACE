@@ -36,6 +36,7 @@ type Integration = {
   schedule: Record<string, unknown>;
   health: Record<string, unknown>;
 };
+type SearchStatus = { status: string; available?: boolean; documentsIndexed?: number; completedAt?: string; error?: string };
 
 type AuditEvent = {
   id: string;
@@ -119,6 +120,7 @@ export default function AdminConsole() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [selectedProvider, setSelectedProvider] = useState<IdentityProvider | null>(null);
   const [selectedIntegration, setSelectedIntegration] = useState<Integration | null>(null);
+  const [searchStatus, setSearchStatus] = useState<SearchStatus | null>(null);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [newUser, setNewUser] = useState({ email: "", displayName: "", password: "", roles: ["LIBRARIAN"] });
   const [message, setMessage] = useState("Loading configuration...");
@@ -151,13 +153,14 @@ export default function AdminConsole() {
       const me = await meResponse.json() as CurrentUser;
       setCurrentUser(me);
       setTenant(me.tenantSlug);
-      const [nextAppearance, nextProviders, nextIntegrations, nextAudit, nextUsers, nextRoles] = await Promise.all([
+      const [nextAppearance, nextProviders, nextIntegrations, nextAudit, nextUsers, nextRoles, nextSearch] = await Promise.all([
         request<Appearance>(`/tenants/${me.tenantSlug}/appearance`),
         request<IdentityProvider[]>(`/tenants/${me.tenantSlug}/identity-providers`),
         request<Integration[]>(`/tenants/${me.tenantSlug}/integrations`),
         request<AuditEvent[]>(`/tenants/${me.tenantSlug}/audit-events`),
         request<User[]>(`/tenants/${me.tenantSlug}/users`),
-        request<Role[]>(`/tenants/${me.tenantSlug}/roles`)
+        request<Role[]>(`/tenants/${me.tenantSlug}/roles`),
+        request<SearchStatus>(`/tenants/${me.tenantSlug}/search/status`)
       ]);
       setAppearance(nextAppearance);
       setProviders(nextProviders);
@@ -165,6 +168,7 @@ export default function AdminConsole() {
       setAuditEvents(nextAudit);
       setUsers(nextUsers);
       setRoles(nextRoles);
+      setSearchStatus(nextSearch);
       setSelectedProvider(nextProviders[0] ?? null);
       setSelectedIntegration(nextIntegrations[0] ?? null);
       setSelectedRole(nextRoles[0] ?? null);
@@ -205,6 +209,21 @@ export default function AdminConsole() {
       body: JSON.stringify(selectedIntegration)
     });
     setMessage("Integration saved");
+    await load();
+  }
+
+  async function runIntegration(operation: "test" | "sync") {
+    if (!selectedIntegration) return;
+    setMessage(`${operation === "test" ? "Testing" : "Synchronizing"} ${selectedIntegration.displayName}...`);
+    const result = await request<{ status: string; error?: string; recordsProcessed?: number }>(`/tenants/${tenant}/integrations/${selectedIntegration.connectorKey}/${operation}`, { method: "POST" });
+    setMessage(result.status === "SUCCEEDED" ? `${selectedIntegration.displayName}: ${operation} succeeded${operation === "sync" ? ` (${result.recordsProcessed ?? 0} records)` : ""}` : `${selectedIntegration.displayName}: ${result.error ?? `${operation} failed`}`);
+    await load();
+  }
+
+  async function reindexSearch() {
+    setMessage("Rebuilding the search index...");
+    const result = await request<{ status: string; documentsIndexed: number; error?: string }>(`/tenants/${tenant}/search/reindex`, { method: "POST" });
+    setMessage(result.status === "SUCCEEDED" ? `Search index rebuilt with ${result.documentsIndexed} documents` : `Search reindex failed: ${result.error}`);
     await load();
   }
 
@@ -500,8 +519,21 @@ export default function AdminConsole() {
                   setSelectedIntegration({ ...selectedIntegration, mappingProfile: value as Record<string, unknown> })
                 }
               />
+              <div className="workflow-actions">
+                <button type="button" className="secondary-button" onClick={() => runIntegration("test")}>Test connection</button>
+                <button type="button" className="secondary-button" onClick={() => runIntegration("sync")}>Sync now</button>
+              </div>
             </>
           ) : null}
+        </article>
+        <article className="panel">
+          <div className="panel-heading"><div><p className="eyebrow">Discovery</p><h2>Search index</h2></div><button type="button" onClick={reindexSearch}>Reindex</button></div>
+          <dl className="operation-status">
+            <div><dt>OpenSearch</dt><dd>{searchStatus?.available ? "Available" : "Unavailable - database fallback active"}</dd></div>
+            <div><dt>Last run</dt><dd>{searchStatus?.status ?? "Not indexed"}</dd></div>
+            <div><dt>Documents</dt><dd>{searchStatus?.documentsIndexed ?? 0}</dd></div>
+            {searchStatus?.completedAt ? <div><dt>Completed</dt><dd>{new Date(searchStatus.completedAt).toLocaleString()}</dd></div> : null}
+          </dl>
         </article>
       </section>
 

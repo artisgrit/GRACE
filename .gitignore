@@ -1,1 +1,8 @@
-Nothing should be ignored based on the provided file changes. The added files are all source code and documentation files (.java, .md) which should be tracked in version control.
+.env
+.DS_Store
+node_modules/
+.next/
+target/
+*.log
+.idea/
+*.iml

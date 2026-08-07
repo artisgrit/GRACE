@@ -107,8 +107,8 @@ grace/
 | 2 | Guide Management, Pages, Blocks, Templates, Revisions |
 | 3 | Editorial Workflow, Review, Publishing, Scheduling |
 | 4 | Subjects, Databases, Librarians, FAQs, Books, Reading Lists |
-| 5 | AI, Semantic Search, RAG |
-| 6 | Linked Data, Knowledge Graph, MCP |
+| 5 | OpenSearch indexing, unified search, facets, autocomplete, resilient fallback |
+| 6 | DSpace, OAI-PMH, VuFind, Koha, OJS and LTI foundations |
 | 7 | Production Hardening, Accessibility, Performance, Security, Documentation |
 
 ## Quick Start
@@ -136,6 +136,7 @@ See the [docs/](docs/) directory for comprehensive documentation:
 - [Identity, Tenancy and RBAC](docs/IDENTITY_TENANCY_RBAC.md)
 - [Guide Management](docs/GUIDE_MANAGEMENT.md)
 - [Editorial Workflow and Library Resources](docs/EDITORIAL_WORKFLOW_AND_RESOURCES.md)
+- [Search and Integration Operations](docs/SEARCH_AND_INTEGRATIONS.md)
 
 - Installation Guide
 - Administration Guide

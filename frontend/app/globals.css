@@ -297,6 +297,11 @@ button:disabled {
   margin-top: 1rem;
 }
 
+.operation-status { display: grid; gap: 0.65rem; margin: 1rem 0 0; }
+.operation-status div { display: grid; grid-template-columns: 7rem 1fr; gap: 0.75rem; }
+.operation-status dt { color: var(--grace-muted-text); }
+.operation-status dd { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+
 .audit-list div {
   display: grid;
   gap: 0.25rem;
@@ -981,6 +986,24 @@ button:disabled {
   border-top: 1px solid var(--grace-border);
 }
 
+.unified-search {
+  display: grid;
+  grid-template-columns: minmax(18rem, 1fr) minmax(10rem, 14rem) minmax(10rem, 14rem) auto;
+  gap: 0.75rem;
+  align-items: end;
+  margin: 1.5rem 0 0.75rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--grace-border);
+  border-bottom: 1px solid var(--grace-border);
+}
+
+.unified-search .field { margin-top: 0; }
+.search-results { display: grid; border-top: 1px solid var(--grace-border); }
+.search-result { padding: 1.25rem 0; border-bottom: 1px solid var(--grace-border); }
+.search-result h2 { margin: 0.35rem 0; font-size: 1.3rem; }
+.search-result h2 a { color: var(--grace-color-primary); }
+.search-result p { max-width: 52rem; color: var(--grace-muted-text); line-height: 1.6; }
+
 .directory-record {
   position: relative;
   min-width: 0;
@@ -1026,7 +1049,8 @@ button:disabled {
   .workflow-layout,
   .resource-admin-grid,
   .directory-search,
-  .directory-results {
+  .directory-results,
+  .unified-search {
     grid-template-columns: 1fr;
   }
 
